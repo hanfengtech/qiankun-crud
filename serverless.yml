@@ -6,7 +6,9 @@ provider:
   name: aws
   runtime: nodejs12.x
   environment:
+    IS_OFFLINE: true
     DYNAMODB_QIANKUN_TABLE: ${self:service}-qiankun-${opt:stage}
+    
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -19,6 +21,8 @@ provider:
 
 plugins:
   - serverless-pseudo-parameters
+  - serverless-offline
+  - serverless-dynamodb-local  
 
 functions:
   create:
@@ -52,6 +56,22 @@ functions:
           path: /v1/qiankun/{name}
           method: delete    
 
+custom:
+  dynamodb:
+  # If you only want to use DynamoDB Local in some stages, declare them here
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true
+      seed: true
+      convertEmptyValues: true
+    # Uncomment only if you already have a DynamoDB running locally
+    # noStart: true        
+
 resources:
   Resources:
     qiankunTable:
@@ -60,9 +80,7 @@ resources:
         TableName: ${self:service}-qiankun-${opt:stage}
         AttributeDefinitions:
           - AttributeName: name
-            AttributeType: S
-          - AttributeName: age
-            AttributeType: I          
+            AttributeType: S        
         KeySchema:
           - AttributeName: name
             KeyType: HASH

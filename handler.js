@@ -2,9 +2,14 @@
 
 const AWS = require('aws-sdk')
 
+var dynamodb = require('serverless-dynamodb-client');
+
+var docClient = dynamodb.doc;  // return an instance of new AWS.DynamoDB.DocumentClient()
+
 module.exports = {
   create: async(event, context) => {
     console.log('DB table', process.env.DYNAMODB_QIANKUN_TABLE)
+    console.log('IS OFFLINE', process.env.IS_OFFLINE)
     let bodyObj = {}
     try {
       bodyObj = JSON.parse(event.body)
@@ -33,8 +38,7 @@ module.exports = {
 
     let putResult = {}
     try {
-      let dynamodb = new AWS.DynamoDB.DocumentClient()
-      putResult = await dynamodb.put(putParams).promise()
+      putResult = await docClient.put(putParams).promise()
     } catch(putError) {
       console.log("There was a problem putting the qiankun")
       console.log('putParams', putParams)
@@ -54,8 +58,7 @@ module.exports = {
 
     let scanResult = {}
     try {
-      let dynamodb = new AWS.DynamoDB.DocumentClient()
-      scanResult = await dynamodb.scan(scanParams).promise()      
+      scanResult = await docClient.scan(scanParams).promise()      
     } catch (scanError) {
       console.log('There was a problem scanning the qiankun')
       console.log('scanError', scanError)
@@ -92,8 +95,7 @@ module.exports = {
 
     let getResult = {}
     try {
-      let dynamodb = new AWS.DynamoDB.DocumentClient()
-      getResult = await dynamodb.get(getParams).promise()      
+      getResult = await docClient.get(getParams).promise()      
     } catch (getError) {
       console.log('There was a problem getting the qiankun')
       console.log('getError', getError)
@@ -149,8 +151,7 @@ module.exports = {
     }
 
     try {
-      let dynamodb = new AWS.DynamoDB.DocumentClient()
-      await dynamodb.update(updateParams).promise()      
+      await docClient.update(updateParams).promise()      
     } catch (updateError) {
       console.log('There was a problem updateting the qiankun')
       console.log('updateError', updateError)
@@ -172,8 +173,7 @@ module.exports = {
     }
 
     try {
-      let dynamodb = new AWS.DynamoDB.DocumentClient()
-      await dynamodb.delete(deleteParams).promise()      
+      await docClient.delete(deleteParams).promise()      
     } catch (deleteError) {
       console.log('There was a problem deleteting the qiankun')
       console.log('deleteError', deleteError)

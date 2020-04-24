@@ -24,3 +24,32 @@
 ###
 
   DELETE https://n7ookwzlth.execute-api.us-east-1.amazonaws.com/dev/v1/qiankun/kitten
+
+
+###
+  POST http://localhost:3000/dev/v1/qiankun
+
+  {
+      "name": "sanfeng",
+      "age": 9999
+  }
+
+###
+
+  GET http://localhost:3000/dev/v1/qiankun
+
+###
+
+  GET http://localhost:3000/dev/v1/qiankun/smith
+
+###
+
+  PUT http://localhost:3000/dev/v1/qiankun/tianzi
+
+  {
+      "age": 200
+  }
+
+###
+// local request
+DELETE http://localhost:3000/dev/v1/qiankun/smith
