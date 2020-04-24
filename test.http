@@ -1,0 +1,26 @@
+  POST https://n7ookwzlth.execute-api.us-east-1.amazonaws.com/dev/v1/qiankun
+
+  {
+      "name": "tianyu",
+      "age": 10
+  }
+
+###
+
+  GET https://n7ookwzlth.execute-api.us-east-1.amazonaws.com/dev/v1/qiankun
+
+###
+
+  GET https://n7ookwzlth.execute-api.us-east-1.amazonaws.com/dev/v1/qiankun/smith
+
+###
+
+  PUT https://n7ookwzlth.execute-api.us-east-1.amazonaws.com/dev/v1/qiankun/smith
+
+  {
+      "age": 8
+  }
+
+###
+
+  DELETE https://n7ookwzlth.execute-api.us-east-1.amazonaws.com/dev/v1/qiankun/kitten

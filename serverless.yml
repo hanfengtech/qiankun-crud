@@ -1,0 +1,69 @@
+tenant: 
+app: 
+service: qiankun-crud
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  environment:
+    DYNAMODB_QIANKUN_TABLE: ${self:service}-qiankun-${opt:stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:Scan*
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/${self:service}-qiankun-${opt:stage}
+
+plugins:
+  - serverless-pseudo-parameters
+
+functions:
+  create:
+    handler: handler.create
+    events:
+      - http:
+          path: /v1/qiankun
+          method: post
+  list:
+    handler: handler.list
+    events:
+      - http:
+          path: /v1/qiankun
+          method: get    
+  get:
+    handler: handler.get
+    events:
+      - http:
+          path: /v1/qiankun/{name}
+          method: get    
+  update:
+    handler: handler.update
+    events:
+      - http:
+          path: /v1/qiankun/{name}
+          method: put    
+  delete:
+    handler: handler.delete
+    events:
+      - http:
+          path: /v1/qiankun/{name}
+          method: delete    
+
+resources:
+  Resources:
+    qiankunTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:service}-qiankun-${opt:stage}
+        AttributeDefinitions:
+          - AttributeName: name
+            AttributeType: S
+          - AttributeName: age
+            AttributeType: I          
+        KeySchema:
+          - AttributeName: name
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
